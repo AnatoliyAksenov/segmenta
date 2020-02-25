@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="container">
+        <h2>Make class masks</h2>
+    </div>
+</div>
+<div class="container">
+    <div class="row" ng-if="image.src">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary" ng-click="clear()">Clear</button>
+                <button type="button" class="btn btn-secondary" ng-click="saveMask()">Save</button>
+                <select ng-if="classes.length > 0" class="form-control sel-class" ng-model="current.class" ng-options="c.class_name for c in classes" ng-change="changeClass()">
+                </select> 
+            </div>
+               
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div style="width: 500px; height: auto;" ng-init="init()">
+                <img class="img-edit" ng-src="{{ image.src }}" />
+                <canvas class="mask-canvas" id="maskCanvas"></canvas>
+            </div>
+            
+            <div ng-if="!image.src">
+                <img class="img-blank" src="/src/blank.png">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container pt10">
+    <div class="row">
+        <div class="col-md-12">
+                <button type="button" ng-disabled="current.changing == true" class="btn btn-sm btn-warning" ng-click="save()">Save and Return</button>
+        </div>
+    </div>    
+</div>
+
+
+<!-- Dialogs -->
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Segmenta</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1>
+        <a href="/">
+          <img src="" />&nbsp;Segmenta
+        </a>
+      </h1>
+    </div>
+  </header>
+  <div ng-view id="main">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.2/angular-route.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.2.2/jszip.min.js" integrity="sha256-gy5W5/rXWluWXFRvMWFFMVhocfpBe7Tf4SW2WMfjs4E=" crossorigin="anonymous"></script>
+  
+  <script src="./app.js"></script>
+  <script src="./route.js"></script>
+  <script src="./services.js"></script>
+  <script src="./image-list/index.js"></script>
+  <script src="./image-process/index.js"></script> 
+  <script src="./project-list/index.js"></script>
+  
+</body>
+
+</html>

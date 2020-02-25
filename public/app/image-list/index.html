@@ -1,0 +1,215 @@
+<div class="container-fluid">
+    <div class="container">
+        <h2>Images</h2>
+    </div>
+</div>
+
+<hr />
+
+<div class="container" ng-init="init()">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 ng-if="isLoading">Loading...</h4>
+            <button type="button" class="btn btn-success"  ng-click="openLoadImages()">Load images</button>
+            <button type="button" class="btn btn-secondary" ng-click="newClass()">Add Class</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div ng-if="imgstat" class="stat">
+                <h4>Statistic and possible group actions.</h4>
+                <table class="table">
+                    <thead>
+                        <th>Width x Height</th>
+                        <th>Count of images</th>
+                        <th>Group actions</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="s in imgstat">
+                            <td>{{ s.lbl }}</td>
+                            <td>{{ s.count }}</td>
+                            <td>
+                                <button type="button" class="btn btn-link btn-xs" ng-if="s.has_couple" ng-click="groupRotate(s.w, s.h)">to {{s.h}}x{{s.w}}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5 ng-if="images == null || images.length == 0">No images have been loaded - please create one when you are ready.</h5>
+            <table ng-if="images != null &amp;&amp; images.length > 0" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Filename</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Thumbnail</th>
+                        <th scope="col">Classes</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="img in images">
+                        <td scope="row">
+                            <i ng-if="img.saved == false" class="fas fa-save fa-xs" ng-click="saveResult($index)"></i>
+                            <i ng-if="img.saved == true" class="fas fa-hdd fa-xs"></i>
+                            {{img.name}}
+                        </td>
+                        <td>{{ img.type }}</td>
+                        <td><img class="img-thumbnail" ng-src="{{ img.src }}" ng-click="viewImage($index)"/></td>
+                        <td>
+                            <img class="img-thumbnail" ng-src="{{ m.src }}" ng-repeat="m in masks[$index]" ng-alt="{{m.class_name}}"/>
+                            
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-warning" ng-click="gotoEdit($index)">Edit</button>
+                            <button type="button" class="btn btn-sm btn-danger" ng-click="deleteImage(img)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="100%">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li ng-if="projectPageTokens.length" class="page-item">
+                                        <a class="page-link" href="#" ng-click="viewPreviousProjectsPage()">Previous</a>
+                                    </li>
+                                    <li ng-if="nextPageToken" class="page-item">
+                                        <a class="page-link" href="#page={{nextPageToken}}" ng-click="viewNextProjectsPage()">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>    
+</div>
+
+<!-- Dialogs -->
+
+<!-- Load images-->
+<div id="loadImagesDialog" class="modal fade" tabindex="-1" aria-labelledby="loadImageDialogLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="loadImageDialogLabel">Load images</h4>
+                
+            </div>
+            <div class="modal-body">
+                <input type="file" id="filesselect" multiple accept="image/*" class="visually-hidden" />
+                <div id="drop_zone">Drop files here</div>
+                <p id="imagecount"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeLoadImages()">Close</button>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Process images -->
+<div id="processImagesDialog" class="modal fade" tabindex="-1" aria-labelledby="processImagesDialogLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="processImagesDialogLabel">Process images</h4>
+                
+            </div>
+            <div class="modal-body">
+                <div style="width: 100%; height: 100%;">
+                    <img class="img-edit" ng-src="{{ edt.image.src }}" />
+                    <canvas class="mask-canvas" id="maskCanvas"></canvas>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="closeLoadImages()">Close</button>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New class -->
+<div id="NewClassDialog" class="modal fade" tabindex="-1" aria-labelledby="loadImageDialogLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="loadImageDialogLabel">Load images</h4>
+                
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="classname">Class name</label>
+                    <input type="text" class="form-control" ng-model="class_name" id="classname" placeholder="Enter class name">
+                </div>
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    <input type="text" class="form-control" ng-model="class_color" id="color" placeholder="Enter class color">
+                </div>                    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" ng-click="addClass()">Save & New</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="addClass()">Save & Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View image -->
+<div id="ViewImageDialog" class="modal fade" tabindex="-1" aria-labelledby="ViewImageDialogLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="ViewImageDialogLabel">View Image {{imgview.name}}</h4>
+                
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Image info:</p>
+                        <ul>
+                            <li>file size: {{ imgview.size }} bytes</li>
+                            <li>image size: {{ imgview.naturalWidth }}x{{ imgview.naturalHeight }}</li>
+                            <li>last changed: {{ imgview.lastChangedDate }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-secondary" ng-click="rotateCounterClockwise(imgview.index)"><i class="fas fa-reply"></i></button>
+                        <button type="button" class="btn btn-secondary" ng-click="rotateClockwise(imgview.index)"><i class="fas fa-share"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <img class="img-view" ng-src="{{ imgview.src }}" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>                
+            </div>
+        </div>
+    </div>
+</div>

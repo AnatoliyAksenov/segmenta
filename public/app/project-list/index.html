@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" clss="btn btn-default" ng-click="showprojectdialog()"><i class="fas fa-plus"></i></button>
+        </div>
+    </div>
+    <div class="row" ng-init="init()">
+        <div class="col-md-12">
+                <table ng-if="!!projects == true" class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Project&nbsp;name</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="prj in projects" ng-click="toImages(prj.id)">
+                                <td scope="row">{{ prj.name }}</td>
+                                <td>{{ prj.description }}</td>
+                            </tr>
+                        </tbody>                    
+                    </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Project -->
+<div id="AddProjectDialog" class="modal fade" tabindex="-1" aria-labelledby="ViewImageDialogLabel" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ViewImageDialogLabel">Add new project</h4>                    
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Project name</label>
+                        <input type="text" class="form-control" ng-model="project_name" placeholder="Enter project name">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control" ng-model="project_description" placeholder="Enter project description">
+                    </div>                  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" ng-click="createproject()">Save & Close</button>                
+                </div>
+            </div>
+        </div>
+    </div>
